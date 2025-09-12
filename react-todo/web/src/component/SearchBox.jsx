@@ -1,10 +1,8 @@
 import { useState } from "react"
-import { Task } from './Task'
 
 export function SearchBox() {
 
     const [inputValue, setInputValue] = useState('')
-    const [taskList, setTaskList] = useState([])
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
@@ -12,8 +10,9 @@ export function SearchBox() {
             alert('Cannot add empty task!')
         }
         else {
-            setTaskList((prevArr) => [...prevArr, inputValue])
-            setInputValue('')
+            updateTaskList(inputValue);
+            // setTaskList((prevArr) => [...prevArr, inputValue])
+            // setInputValue('')
         }
     }
 

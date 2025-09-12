@@ -1,16 +1,17 @@
 import { useState } from 'react'
-import './component/SearchBox'
-import './App.css'
-import { SearchBox } from './component/SearchBox'
+import { SearchBox } from './SearchBox'
 
-function App() {
+export default function TodoApp() {
+  
+  const [taskList, setTaskList] = useState([])
+
+  const updateTaskList = (task) => {
+    setTaskList( prevList => [...prevList, task] )
+  }
   
   return (
     <>
-      <h1>TO-DO App</h1>
-      <SearchBox/>
+      <SearchBox taskList = {taskList} updateTaskList = {updateTaskList} />
     </>
   )
 }
-
-export default App
