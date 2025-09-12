@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-export function SearchBox() {
+export function SearchBox( { updateTaskList } ) {
 
     const [inputValue, setInputValue] = useState('')
 
@@ -11,8 +11,7 @@ export function SearchBox() {
         }
         else {
             updateTaskList(inputValue);
-            // setTaskList((prevArr) => [...prevArr, inputValue])
-            // setInputValue('')
+            setInputValue('')
         }
     }
 

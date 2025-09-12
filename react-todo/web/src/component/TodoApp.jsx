@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { SearchBox } from './SearchBox'
+import { Task } from './Task'
 
 export default function TodoApp() {
   
@@ -8,10 +9,17 @@ export default function TodoApp() {
   const updateTaskList = (task) => {
     setTaskList( prevList => [...prevList, task] )
   }
+
+  const updatedList = taskList.map( task => {
+    return <li>
+      <Task taskValue = {task} />
+    </li>
+  })
   
   return (
     <>
-      <SearchBox taskList = {taskList} updateTaskList = {updateTaskList} />
+      <SearchBox updateTaskList = {updateTaskList} />
+      <ul>{updatedList}</ul>
     </>
   )
 }

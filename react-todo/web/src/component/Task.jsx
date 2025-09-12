@@ -1,12 +1,10 @@
-import { FaTrash } from 'react-icons/fa';
+import { MdDelete } from 'react-icons/md';
 
 export function Task( { taskValue } ) {
 
     return (
-        <div>
-            <span>
-                <p> {taskValue} <FaTrash/></p>
-            </span>
+        <div className='task-item'>
+            <span> {taskValue} <MdDelete/> </span>
         </div>
     )   
 }
