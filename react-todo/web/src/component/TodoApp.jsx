@@ -10,12 +10,6 @@ export default function TodoApp() {
     setTaskList(prevList => [...prevList, task])
   }
 
-  // const updatedList = taskList.map( task => {
-  //   return <li>
-  //     <Task taskValue = {task} />
-  //   </li>
-  // })
-
   return (
     <>
       <SearchBox updateTaskList={updateTaskList} />
