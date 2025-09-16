@@ -21,30 +21,43 @@ function initPlayer(CURR_X, CURR_Y) {
 }
 
 
+// class Block {
+
+// }
 
 class FallingBlock {
 
-    constructor(x, y, speed) {
-        this.x = x;
-        this.y = y;
-        this.speed = speed;
+    constructor() {
+        this.speed = 8
+        this.initBlocks();
     }
+
+    initBlocks() {
+        this.blocks = [ ]
+    }
+
 
     initFall() {
         drawCanvas();
         initPlayer(CURR_X, CURR_Y);
 
-        ctx.fillStyle = "#4335c5ff";
-        ctx.fillRect(this.x, this.y, 30, 30);
-        this.y = this.y + this.speed
-        console.log(`x: ${this.x}; y: ${this.y}`)
+        for (let i = 0; i < this.blocks.length; i++) {
 
-        if (this.y > canvas.height) {
-            return;
+            let x = this.blocks[i][0];
+            let y = this.blocks[i][1];
+
+            ctx.fillStyle = "#4335c5ff";
+            ctx.fillRect(x, y, 30, 30);
+
+            this.blocks[i][1] = y + this.speed
+
+            // Block Out-of-bounds
+
+
+            console.log(`Falling: x: ${x} y: ${y}`)
         }
-        console.log("Falling")
 
-        requestAnimationFrame( () => this.initFall())
+        requestAnimationFrame(() => this.initFall())
     }
 }
 
@@ -108,7 +121,7 @@ blockB.initFall()
 document.addEventListener('keydown', function (event) {
 
     switch (event.key) {
-        
+
         case "a":
         case "ArrowLeft":
             movePlayer("left")
@@ -119,7 +132,7 @@ document.addEventListener('keydown', function (event) {
             movePlayer("right")
             break;
 
-        case "w":    
+        case "w":
         case "ArrowUp":
             movePlayer("up")
             break;
