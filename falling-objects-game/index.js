@@ -14,26 +14,33 @@ function drawCanvas() {
 }
 
 
-
 function initPlayer(CURR_X, CURR_Y) {
     ctx.fillStyle = "#bb333fff";
     ctx.fillRect(CURR_X, CURR_Y, 20, 20);
 }
 
 
-// class Block {
-
-// }
+class Block {
+    constructor() {
+        this.x = getRandomX();
+        this.y = 0;
+        this.speed = getRandomSpeed();
+    }
+}
 
 class FallingBlock {
 
     constructor() {
-        this.speed = 8
         this.initBlocks();
     }
 
     initBlocks() {
-        this.blocks = [ ]
+        this.blocks = []
+
+        for (let i = 1; i <= 4; i++) {
+            let b = new Block()
+            this.blocks.push(b)
+        }
     }
 
 
@@ -43,16 +50,20 @@ class FallingBlock {
 
         for (let i = 0; i < this.blocks.length; i++) {
 
-            let x = this.blocks[i][0];
-            let y = this.blocks[i][1];
+            let x = this.blocks[i].x;
+            let y = this.blocks[i].y;
 
             ctx.fillStyle = "#4335c5ff";
             ctx.fillRect(x, y, 30, 30);
 
-            this.blocks[i][1] = y + this.speed
+            this.blocks[i].y = y + this.blocks[i].speed
 
             // Block Out-of-bounds
-
+            if (this.blocks[i].y > canvas.height) {
+                this.blocks[i].y = 0;
+                this.blocks[i].x = getRandomX();
+                this.blocks[i].speed = getRandomSpeed();
+            }
 
             console.log(`Falling: x: ${x} y: ${y}`)
         }
@@ -66,7 +77,7 @@ class FallingBlock {
 
 // Movement on Key press
 
-function movePlayer(direction, speed = 5) {
+function movePlayer(direction, speed = 10) {
 
     drawCanvas();
     if (direction === "left") {
@@ -90,29 +101,27 @@ function movePlayer(direction, speed = 5) {
 
 
 
-// Util functions
+// =========================   UTIL FUNCTIONS   =========================
+
 function getRandomX() {
     let val = Math.random();
     return Math.floor(val * 270)
 }
 
+function getRandomSpeed() {
+    let val = Math.random();
+    return Math.ceil(val * 4) + 4
+}
 
 
-// =========================   Main Game Init   =========================
+
+// =========================   MAIN GAME INIT   =========================
 
 drawCanvas();
 initPlayer(CURR_X, CURR_Y);
 // initFallingBlocks(30);
-blockA = new FallingBlock(30, 0, 10)
-blockB = new FallingBlock(50, 0, 10)
-blockA.initFall();
-blockB.initFall()
-
-
-// let block1 = new fallingBlocks(getRandomX(), 0);
-
-// let block2 = new fallingBlocks(getRandomX(), 0);
-
+let fallingBlockObj = new FallingBlock();
+fallingBlockObj.initFall();
 
 
 
