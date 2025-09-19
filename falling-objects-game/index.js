@@ -91,6 +91,11 @@ function movePlayer() {
     if(pressedKeys["ArrowDown"] || pressedKeys["s"]) {
         PLAYER_Y += PLAYER_SPEED;
     }
+
+    // stay inside canvas boundary
+    PLAYER_X = Math.min( Math.max(1, PLAYER_X), canvasWidth - 21);
+    PLAYER_Y = Math.min( Math.max(1, PLAYER_Y), canvasHeight - 21);
+
     requestAnimationFrame(movePlayer);
 }
 
