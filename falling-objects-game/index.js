@@ -28,7 +28,7 @@ class Block {
     }
 }
 
-class FallingBlock {
+class FallingBlocks {
 
     constructor() {
         this.initBlocks();
@@ -64,8 +64,6 @@ class FallingBlock {
                 this.blocks[i].x = getRandomX();
                 this.blocks[i].speed = getRandomSpeed();
             }
-
-            console.log(`Falling: x: ${x} y: ${y}`)
         }
 
         requestAnimationFrame(() => this.initFall())
@@ -77,24 +75,56 @@ class FallingBlock {
 
 // Movement on Key press
 
-function movePlayer(direction, speed = 10) {
+// function movePlayer(direction, speed = 10) {
 
-    drawCanvas();
-    if (direction === "left") {
+//     drawCanvas();
+//     if (direction === "left" && pressedKeys["ArrowL"]) {
+//         CURR_X -= speed;
+//         initPlayer(CURR_X, CURR_Y);
+//     }
+//     else if (direction === "right") {
+//         CURR_X += speed;
+//         initPlayer(CURR_X, CURR_Y);
+//     }
+//     else if (direction === "down") {
+//         CURR_Y += speed;
+//         initPlayer(CURR_X, CURR_Y);
+//     }
+//     else if (direction === "up") {
+//         CURR_Y -= speed;
+//         initPlayer(CURR_X, CURR_Y);
+//     }
+
+//     requestAnimationFrame( () => movePlayer(direction, speed) );
+// }
+
+const speed = 10
+
+function moveLeft(key) {
+    if(pressedKeys[key] == true) {
         CURR_X -= speed;
-        initPlayer(CURR_X, CURR_Y);
+        requestAnimationFrame( () => moveLeft(key) )
     }
-    else if (direction === "right") {
+}
+
+function moveRight(key) {
+    if(pressedKeys[key] == true) {
         CURR_X += speed;
-        initPlayer(CURR_X, CURR_Y);
+        requestAnimationFrame( () => moveRight(key) )
     }
-    else if (direction === "down") {
-        CURR_Y += speed;
-        initPlayer(CURR_X, CURR_Y);
-    }
-    else if (direction === "up") {
+}
+
+function moveUp(key) {
+    if(pressedKeys[key] == true) {
         CURR_Y -= speed;
-        initPlayer(CURR_X, CURR_Y);
+        requestAnimationFrame( () => moveUp(key) )
+    }
+}
+
+function moveDown(key) {
+    if(pressedKeys[key] == true) {
+        CURR_Y += speed;
+        requestAnimationFrame( () => moveDown(key) )
     }
 }
 
@@ -120,35 +150,49 @@ function getRandomSpeed() {
 drawCanvas();
 initPlayer(CURR_X, CURR_Y);
 // initFallingBlocks(30);
-let fallingBlockObj = new FallingBlock();
-fallingBlockObj.initFall();
+let fallingBlocksObj = new FallingBlocks();
+fallingBlocksObj.initFall();
+
 
 
 
 // =========================   EVENT LISTNERS   =========================
 
+
+const pressedKeys = {}
+
 document.addEventListener('keydown', function (event) {
+
+    let key = event.key
+    pressedKeys[key] = true;
 
     switch (event.key) {
 
         case "a":
         case "ArrowLeft":
-            movePlayer("left")
+            moveLeft(key);
             break;
 
         case "d":
         case "ArrowRight":
-            movePlayer("right")
+            moveRight(key)
             break;
 
         case "w":
         case "ArrowUp":
-            movePlayer("up")
+            moveUp(key)
             break;
 
         case "s":
         case "ArrowDown":
-            movePlayer("down")
+            moveDown(key)
             break;
     }
+});
+
+
+document.addEventListener('keyup', function (event) {
+
+    pressedKeys[event.key] = false;
+
 });
