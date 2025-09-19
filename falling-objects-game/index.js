@@ -2,9 +2,13 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-let canvasHeight = canvas.height
-let canvasWidth = canvas.width
-let CURR_X = 150, CURR_Y = 580;
+const canvasHeight = canvas.height
+const canvasWidth = canvas.width
+
+let PLAYER_X = 150, PLAYER_Y = 580;
+const PLAYER_SPEED = 10
+
+const pressedKeys = {}
 
 
 function drawCanvas() {
@@ -14,9 +18,9 @@ function drawCanvas() {
 }
 
 
-function initPlayer(CURR_X, CURR_Y) {
+function initPlayer(PLAYER_X, PLAYER_Y) {
     ctx.fillStyle = "#bb333fff";
-    ctx.fillRect(CURR_X, CURR_Y, 20, 20);
+    ctx.fillRect(PLAYER_X, PLAYER_Y, 20, 20);
 }
 
 
@@ -46,7 +50,7 @@ class FallingBlocks {
 
     initFall() {
         drawCanvas();
-        initPlayer(CURR_X, CURR_Y);
+        initPlayer(PLAYER_X, PLAYER_Y);
 
         for (let i = 0; i < this.blocks.length; i++) {
 
@@ -71,63 +75,24 @@ class FallingBlocks {
 }
 
 
-
-
-// Movement on Key press
-
-// function movePlayer(direction, speed = 10) {
-
-//     drawCanvas();
-//     if (direction === "left" && pressedKeys["ArrowL"]) {
-//         CURR_X -= speed;
-//         initPlayer(CURR_X, CURR_Y);
-//     }
-//     else if (direction === "right") {
-//         CURR_X += speed;
-//         initPlayer(CURR_X, CURR_Y);
-//     }
-//     else if (direction === "down") {
-//         CURR_Y += speed;
-//         initPlayer(CURR_X, CURR_Y);
-//     }
-//     else if (direction === "up") {
-//         CURR_Y -= speed;
-//         initPlayer(CURR_X, CURR_Y);
-//     }
-
-//     requestAnimationFrame( () => movePlayer(direction, speed) );
 // }
 
-const speed = 10
+function movePlayer() {
 
-function moveLeft(key) {
-    if(pressedKeys[key] == true) {
-        CURR_X -= speed;
-        requestAnimationFrame( () => moveLeft(key) )
+    if(pressedKeys["ArrowLeft"] || pressedKeys["a"]) {
+        PLAYER_X -= PLAYER_SPEED;
     }
-}
-
-function moveRight(key) {
-    if(pressedKeys[key] == true) {
-        CURR_X += speed;
-        requestAnimationFrame( () => moveRight(key) )
+    if(pressedKeys["ArrowRight"] || pressedKeys["d"]) {
+        PLAYER_X += PLAYER_SPEED;
     }
-}
-
-function moveUp(key) {
-    if(pressedKeys[key] == true) {
-        CURR_Y -= speed;
-        requestAnimationFrame( () => moveUp(key) )
+    if(pressedKeys["ArrowUp"] || pressedKeys["w"]) {
+        PLAYER_Y -= PLAYER_SPEED;
     }
-}
-
-function moveDown(key) {
-    if(pressedKeys[key] == true) {
-        CURR_Y += speed;
-        requestAnimationFrame( () => moveDown(key) )
+    if(pressedKeys["ArrowDown"] || pressedKeys["s"]) {
+        PLAYER_Y += PLAYER_SPEED;
     }
+    requestAnimationFrame(movePlayer);
 }
-
 
 
 
@@ -148,10 +113,12 @@ function getRandomSpeed() {
 // =========================   MAIN GAME INIT   =========================
 
 drawCanvas();
-initPlayer(CURR_X, CURR_Y);
+initPlayer(PLAYER_X, PLAYER_Y);
 // initFallingBlocks(30);
 let fallingBlocksObj = new FallingBlocks();
 fallingBlocksObj.initFall();
+
+movePlayer();
 
 
 
@@ -159,35 +126,12 @@ fallingBlocksObj.initFall();
 // =========================   EVENT LISTNERS   =========================
 
 
-const pressedKeys = {}
+
 
 document.addEventListener('keydown', function (event) {
 
-    let key = event.key
-    pressedKeys[key] = true;
+    pressedKeys[event.key] = true;
 
-    switch (event.key) {
-
-        case "a":
-        case "ArrowLeft":
-            moveLeft(key);
-            break;
-
-        case "d":
-        case "ArrowRight":
-            moveRight(key)
-            break;
-
-        case "w":
-        case "ArrowUp":
-            moveUp(key)
-            break;
-
-        case "s":
-        case "ArrowDown":
-            moveDown(key)
-            break;
-    }
 });
 
 
