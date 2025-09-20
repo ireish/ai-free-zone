@@ -5,12 +5,15 @@ const ctx = canvas.getContext("2d");
 const canvasHeight = canvas.height
 const canvasWidth = canvas.width
 
-const PLAYER_WIDTH = 20;
-const PLAYER_HEIGHT = 20;
+const PLAYER_WIDTH = 25;
+const PLAYER_HEIGHT = 25;
 const PLAYER_SPEED = 8;
 
 const PLAYER_START_X = (canvasWidth / 2) - (PLAYER_WIDTH / 2);
 const PLAYER_START_Y = canvasHeight - PLAYER_HEIGHT;
+
+const FALLING_OBJECT_HEIGHT = 35;
+const FALLING_OBJECT_WIDTH = 35;
 
 const PRESSED_KEYS = {}
 
@@ -90,7 +93,7 @@ class FallingBlocks {
             let y = this.blocks[i].y;
 
             ctx.fillStyle = "#4335c5ff";
-            ctx.fillRect(x, y, 30, 30);
+            ctx.fillRect(x, y, FALLING_OBJECT_HEIGHT, FALLING_OBJECT_WIDTH);
 
             this.blocks[i].y = y + this.blocks[i].speed
 
@@ -102,7 +105,6 @@ class FallingBlocks {
             }
         }
     }
-
 }
 
 
@@ -142,14 +144,14 @@ gameLoop();
 // =========================   EVENT LISTNERS   =========================
 
 document.addEventListener('keydown', function (event) {
-
+    event.preventDefault();
     PRESSED_KEYS[event.key] = true;
 
 });
 
 
 document.addEventListener('keyup', function (event) {
-
+    
     PRESSED_KEYS[event.key] = false;
 
 });
