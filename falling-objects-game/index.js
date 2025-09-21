@@ -31,7 +31,8 @@ class Player {
     static x = PLAYER_START_X;
     static y = PLAYER_START_Y;
     static speed = PLAYER_SPEED;
-    static score = 0 
+    static score = 0
+    static isAlive = true; 
 
     static incrementScore() {
         this.score += 1;
@@ -134,6 +135,7 @@ function detectCollision(fallingBlocksObj) {
         let y_diff = Math.abs(Player.y - block.y)
 
         if (x_diff < PLAYER_WIDTH && y_diff < PLAYER_HEIGHT) {
+            Player.isAlive = false;
             console.log("COLLISION!")
         }
     }
