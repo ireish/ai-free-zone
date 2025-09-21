@@ -28,13 +28,16 @@ function drawCanvas() {
 // =========================   PLAYER LOGIC   =========================
 
 class Player {
-    constructor(x, y, speed) {
-        this.x = x;
-        this.y = y;
-        this.speed = speed;
+    static x = PLAYER_START_X;
+    static y = PLAYER_START_Y;
+    static speed = PLAYER_SPEED;
+    static score = 0 
+
+    static incrementScore() {
+        this.score += 1;
     }
 
-    movePlayer() {
+    static movePlayer() {
         if (PRESSED_KEYS["ArrowLeft"] || PRESSED_KEYS["a"]) {
             this.x -= this.speed;
         }
@@ -79,7 +82,7 @@ class FallingBlocks {
     initBlocks() {
         this.blocks = []
 
-        for (let i = 1; i <= 4; i++) {
+        for (let i = 1; i <= 5; i++) {
             let b = new Block()
             this.blocks.push(b)
         }
@@ -102,6 +105,8 @@ class FallingBlocks {
                 this.blocks[i].y = 0;
                 this.blocks[i].x = getRandomX();
                 this.blocks[i].speed = getRandomSpeed();
+
+                Player.incrementScore(); // increment score when each blocks passes by
             }
         }
     }
@@ -115,11 +120,24 @@ function getRandomX() {
     return Math.floor(val * (canvasWidth - PLAYER_WIDTH))
 }
 
+// Generates random speed b/w 6 to 12
 function getRandomSpeed() {
     let val = Math.random();
-    return Math.ceil(val * 5) + 4
+    return Math.ceil(val * 6) + 5
 }
 
+function detectCollision(fallingBlocksObj) {
+
+    for(let block of fallingBlocksObj.blocks) {
+
+        let x_diff = Math.abs(Player.x - block.x)
+        let y_diff = Math.abs(Player.y - block.y)
+
+        if (x_diff < PLAYER_WIDTH && y_diff < PLAYER_HEIGHT) {
+            console.log("COLLISION!")
+        }
+    }
+}
 
 
 // =========================   MAIN GAME LOOP   =========================
@@ -128,14 +146,17 @@ function gameLoop() {
 
     drawCanvas();
 
-    player.movePlayer();
+    Player.movePlayer();
 
     fallingBlocks.updatePosition();
 
+    detectCollision(fallingBlocks);
+
     requestAnimationFrame(gameLoop)
+
 }
 
-const player = new Player(PLAYER_START_X, PLAYER_START_Y, PLAYER_SPEED);
+// const player = new Player(PLAYER_START_X, PLAYER_START_Y, PLAYER_SPEED);
 const fallingBlocks = new FallingBlocks();
 
 gameLoop();
