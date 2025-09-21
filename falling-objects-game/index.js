@@ -2,6 +2,9 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
+const scoreCanvas = document.getElementById("score-canvas")
+const ctx_score = scoreCanvas.getContext("2d")
+
 const canvasHeight = canvas.height
 const canvasWidth = canvas.width
 
@@ -22,6 +25,17 @@ function drawCanvas() {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     ctx.fillStyle = "#c3cdd6";
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+}
+
+function renderScore() {
+    ctx_score.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
+    ctx_score.font = '25px Impact';
+    ctx_score.fillStyle = '#770000ff';
+    ctx_score.strokeStyle = 'black'
+    ctx_score.textAlign = 'center';
+    ctx.textBaseline = 'middle'; 
+
+    ctx_score.fillText(`SCORE: ${Player.score}`, scoreCanvas.width / 2, scoreCanvas.height / 2);
 }
 
 
@@ -147,6 +161,7 @@ function detectCollision(fallingBlocksObj) {
 function gameLoop() {
 
     drawCanvas();
+    renderScore();
 
     Player.movePlayer();
 
