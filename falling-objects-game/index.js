@@ -29,13 +29,26 @@ function drawCanvas() {
 
 function renderScore() {
     ctx_score.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
-    ctx_score.font = '25px Impact';
-    ctx_score.fillStyle = '#770000ff';
+    ctx_score.font = '25px Arial';
+    ctx_score.fillStyle = '#d6045bff';
     ctx_score.strokeStyle = 'black'
     ctx_score.textAlign = 'center';
     ctx.textBaseline = 'middle'; 
 
     ctx_score.fillText(`SCORE: ${Player.score}`, scoreCanvas.width / 2, scoreCanvas.height / 2);
+}
+
+function renderGameOver() {
+    ctx.font = '50px Impact';
+    ctx.fillStyle = '#b61500ff';
+    ctx.strokeStyle = 'black'
+    ctx.textBaseline = 'middle'
+    ctx.textAlign = 'center';
+    
+    ctx.fillText('GAME OVER !', canvasWidth / 2, canvasHeight / 2);
+    ctx.font = '25px Impact';
+    ctx.fillStyle = '#0a6320ff';
+    ctx.fillText('Press "R" to restart', canvasWidth / 2, canvasHeight / 2 + 100);
 }
 
 
