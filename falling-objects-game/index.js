@@ -179,8 +179,8 @@ function handleRestart(event) {
 
         Player.resetPlayer();
         FallingBlocks.initBlocks();
-        gameLoop();
         gameOverHandled = false;
+        gameLoop();
     }
 
 }
