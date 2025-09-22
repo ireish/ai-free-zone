@@ -2,8 +2,14 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
+
 const scoreCanvas = document.getElementById("score-canvas")
 const ctx_score = scoreCanvas.getContext("2d")
+ctx_score.font = '25px Arial';
+ctx_score.fillStyle = '#d6045bff';
+ctx_score.strokeStyle = 'black'
+ctx_score.textAlign = 'center';
+ctx_score.textBaseline = 'middle';
 
 const canvasHeight = canvas.height
 const canvasWidth = canvas.width
@@ -29,12 +35,6 @@ function drawCanvas() {
 
 function renderScore() {
     ctx_score.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
-    ctx_score.font = '25px Arial';
-    ctx_score.fillStyle = '#d6045bff';
-    ctx_score.strokeStyle = 'black'
-    ctx_score.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-
     ctx_score.fillText(`SCORE: ${Player.score}`, scoreCanvas.width / 2, scoreCanvas.height / 2);
 }
 
@@ -219,7 +219,9 @@ gameLoop();
 // =========================   EVENT LISTNERS   =========================
 
 document.addEventListener('keydown', function (event) {
-    event.preventDefault();
+    const handled = ["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","a","d","w","s"," "].includes(event.key);
+    if (handled) event.preventDefault();
+
     PRESSED_KEYS[event.key] = true;
 
 });
