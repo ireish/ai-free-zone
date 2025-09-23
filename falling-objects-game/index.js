@@ -220,9 +220,10 @@ gameLoop();
 
 document.addEventListener('keydown', function (event) {
     const handled = ["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","a","d","w","s"," "].includes(event.key);
-    if (handled) event.preventDefault();
-
-    PRESSED_KEYS[event.key] = true;
+    if (handled){
+        event.preventDefault();
+        PRESSED_KEYS[event.key] = true;
+    }
 
 });
 
