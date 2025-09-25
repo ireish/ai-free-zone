@@ -16,7 +16,7 @@ const canvasWidth = canvas.width
 
 const PLAYER_WIDTH = 25;
 const PLAYER_HEIGHT = 25;
-const PLAYER_SPEED = 8;
+const PLAYER_SPEED = 480; // pixels per second
 
 const PLAYER_START_X = (canvasWidth / 2) - (PLAYER_WIDTH / 2);
 const PLAYER_START_Y = canvasHeight - PLAYER_HEIGHT;
@@ -65,18 +65,19 @@ class Player {
         this.score += 1;
     }
 
-    static movePlayer() {
+    static movePlayer(deltaTime) {
+        const moveDistance = (this.speed * deltaTime) / 1000;
         if (PRESSED_KEYS["ArrowLeft"] || PRESSED_KEYS["a"]) {
-            this.x -= this.speed;
+            this.x -= moveDistance;
         }
         if (PRESSED_KEYS["ArrowRight"] || PRESSED_KEYS["d"]) {
-            this.x += this.speed;
+            this.x += moveDistance;
         }
         if (PRESSED_KEYS["ArrowUp"] || PRESSED_KEYS["w"]) {
-            this.y -= this.speed;
+            this.y -= moveDistance;
         }
         if (PRESSED_KEYS["ArrowDown"] || PRESSED_KEYS["s"]) {
-            this.y += this.speed;
+            this.y += moveDistance;
         }
 
         // stay inside canvas boundary
@@ -120,7 +121,7 @@ class FallingBlocks {
         }
     }
 
-    static updatePosition() {
+    static updatePosition(deltaTime) {
 
         for (let i = 0; i < this.blocks.length; i++) {
 
@@ -130,7 +131,7 @@ class FallingBlocks {
             ctx.fillStyle = "#4335c5ff";
             ctx.fillRect(x, y, FALLING_OBJECT_WIDTH, FALLING_OBJECT_HEIGHT);
 
-            this.blocks[i].y = y + this.blocks[i].speed
+            this.blocks[i].y = y + (this.blocks[i].speed * deltaTime) / 1000;
 
             // Block Out-of-bounds
             if (this.blocks[i].y > canvas.height) {
@@ -152,10 +153,10 @@ function getRandomX() {
     return Math.floor(val * (canvasWidth - FALLING_OBJECT_WIDTH))
 }
 
-// Generates random speed b/w 6 to 12
+// Generates random speed b/w 360 to 720
 function getRandomSpeed() {
     let val = Math.random();
-    return Math.ceil(val * 6) + 5
+    return (Math.ceil(val * 6) + 5) * 60;
 }
 
 function detectCollision() {
@@ -180,7 +181,8 @@ function handleRestart(event) {
         Player.resetPlayer();
         FallingBlocks.initBlocks();
         gameOverHandled = false;
-        gameLoop();
+        lastTime = 0;
+        requestAnimationFrame(gameLoop);
     }
 
 }
@@ -189,15 +191,21 @@ function handleRestart(event) {
 
 let animationId;
 let gameOverHandled = false;
-function gameLoop() {
+let lastTime = 0;
+function gameLoop(timestamp) {
+    if (lastTime === 0) {
+        lastTime = timestamp;
+    }
+    const deltaTime = timestamp - lastTime;
+    lastTime = timestamp;
     
     if (Player.isAlive) {
         drawCanvas();
         renderScore();
 
-        Player.movePlayer();
+        Player.movePlayer(deltaTime);
 
-        FallingBlocks.updatePosition();
+        FallingBlocks.updatePosition(deltaTime);
 
         detectCollision();
 
@@ -213,7 +221,7 @@ function gameLoop() {
 }
 
 FallingBlocks.initBlocks();
-gameLoop();
+requestAnimationFrame(gameLoop);
 
 
 // =========================   EVENT LISTNERS   =========================
