@@ -3,14 +3,6 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 
-const scoreCanvas = document.getElementById("score-canvas")
-const ctx_score = scoreCanvas.getContext("2d")
-ctx_score.font = '25px Arial';
-ctx_score.fillStyle = '#d6045bff';
-ctx_score.strokeStyle = 'black'
-ctx_score.textAlign = 'center';
-ctx_score.textBaseline = 'middle';
-
 const canvasHeight = canvas.height
 const canvasWidth = canvas.width
 
@@ -34,8 +26,11 @@ function drawCanvas() {
 }
 
 function renderScore() {
-    ctx_score.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
-    ctx_score.fillText(`SCORE: ${Player.score}`, scoreCanvas.width / 2, scoreCanvas.height / 2);
+    ctx.font = '25px Arial';
+    ctx.fillStyle = '#d6045bff';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillText(`SCORE: ${Player.score}`, 10, 10);
 }
 
 function renderGameOver() {
@@ -201,13 +196,14 @@ function gameLoop(timestamp) {
     
     if (Player.isAlive) {
         drawCanvas();
-        renderScore();
-
+        
         Player.movePlayer(deltaTime);
-
+        
         FallingBlocks.updatePosition(deltaTime);
-
+        
         detectCollision();
+        
+        renderScore();
 
         animationId = requestAnimationFrame(gameLoop)
     }
