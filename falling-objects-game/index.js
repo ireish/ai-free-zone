@@ -111,7 +111,7 @@ class FallingBlocks {
 
     static initBlocks() {
         this.blocks = []
-        for (let i = 1; i <= 5; i++) {
+        for (let i = 1; i <= 6; i++) {
             this.blocks.push( new Block() )
         }
     }
@@ -151,7 +151,7 @@ function getRandomX() {
 // Generates random speed b/w 360 to 720
 function getRandomSpeed() {
     let val = Math.random();
-    return (Math.ceil(val * 6) + 5) * 60;
+    return (Math.ceil(val * 4) + 10) * 60;
 }
 
 function detectCollision() {
