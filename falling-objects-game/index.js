@@ -30,7 +30,7 @@ function renderScore() {
     ctx.fillStyle = '#d6045bff';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    ctx.fillText(`SCORE: ${Player.score}`, 10, 10);
+    ctx.fillText(`SCORE: ${player.score}`, 10, 10);
 }
 
 function renderGameOver() {
@@ -50,17 +50,19 @@ function renderGameOver() {
 // =========================   PLAYER LOGIC   =========================
 
 class Player {
-    static x = PLAYER_START_X;
-    static y = PLAYER_START_Y;
-    static speed = PLAYER_SPEED;
-    static score = 0
-    static isAlive = true;
+    constructor() {
+        this.x = PLAYER_START_X;
+        this.y = PLAYER_START_Y;
+        this.speed = PLAYER_SPEED;
+        this.score = 0;
+        this.isAlive = true;
+    }
 
-    static incrementScore() {
+    incrementScore() {
         this.score += 1;
     }
 
-    static movePlayer(deltaTime) {
+    movePlayer(deltaTime) {
         const moveDistance = (this.speed * deltaTime) / 1000;
         if (PRESSED_KEYS["ArrowLeft"] || PRESSED_KEYS["a"]) {
             this.x -= moveDistance;
@@ -84,7 +86,7 @@ class Player {
         ctx.fillRect(this.x, this.y, PLAYER_WIDTH, PLAYER_HEIGHT);
     }
 
-    static resetPlayer() {
+    resetPlayer() {
         this.score = 0;
         this.x = PLAYER_START_X;
         this.y = PLAYER_START_Y;
@@ -106,19 +108,20 @@ class Block {
 
 
 class FallingBlocks {
+    constructor() {
+        this.blocks = [];
+    }
 
-    static blocks;
-
-    static initBlocks() {
+    initBlocks() {
         this.blocks = []
         for (let i = 1; i <= 8; i++) {
             this.blocks.push( new Block() )
         }
     }
 
-    static updatePosition(deltaTime) {
+    updatePosition(deltaTime) {
 
-        for (let i = 0; i < getRandomBlocks(); i++) {
+        for (let i = 0; i < this.blocks.length; i++) {
 
             let x = this.blocks[i].x;
             let y = this.blocks[i].y;
@@ -134,7 +137,7 @@ class FallingBlocks {
                 this.blocks[i].x = getRandomX();
                 this.blocks[i].speed = getRandomSpeed();
 
-                Player.incrementScore(); // increment score when each blocks passes by
+                player.incrementScore(); // increment score when each blocks passes by
             }
         }
     }
@@ -160,25 +163,25 @@ function getRandomSpeed() {
 
 function detectCollision() {
 
-    for (let block of FallingBlocks.blocks) {
+    for (let block of fallingBlocks.blocks) {
 
-        let x_diff = Math.abs(Player.x - block.x)
-        let y_diff = Math.abs(Player.y - block.y)
+        let x_diff = Math.abs(player.x - block.x)
+        let y_diff = Math.abs(player.y - block.y)
 
         if (x_diff < PLAYER_WIDTH && y_diff < PLAYER_HEIGHT) {
-            Player.isAlive = false;
+            player.isAlive = false;
         }
     }
 }
 
 function handleRestart(event) {
-    if (event.key === "r" && !Player.isAlive) { // && gameOverHandled == true was suggested as well in IF condition; but really needed ?
+    if (event.key === "r" && !player.isAlive) { // && gameOverHandled == true was suggested as well in IF condition; but really needed ?
         for(let key in PRESSED_KEYS) {
             PRESSED_KEYS[key] = false;
         }
 
-        Player.resetPlayer();
-        FallingBlocks.initBlocks();
+        player.resetPlayer();
+        fallingBlocks.initBlocks();
         gameOverHandled = false;
         lastTime = 0;
         requestAnimationFrame(gameLoop);
@@ -198,12 +201,12 @@ function gameLoop(timestamp) {
     const deltaTime = timestamp - lastTime;
     lastTime = timestamp;
     
-    if (Player.isAlive) {
+    if (player.isAlive) {
         drawCanvas();
         
-        Player.movePlayer(deltaTime);
+        player.movePlayer(deltaTime);
         
-        FallingBlocks.updatePosition(deltaTime);
+        fallingBlocks.updatePosition(deltaTime);
         
         detectCollision();
         
@@ -220,7 +223,9 @@ function gameLoop(timestamp) {
     }
 }
 
-FallingBlocks.initBlocks();
+const player = new Player();
+const fallingBlocks = new FallingBlocks();
+fallingBlocks.initBlocks();
 requestAnimationFrame(gameLoop);
 
 
