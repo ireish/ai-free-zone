@@ -111,14 +111,14 @@ class FallingBlocks {
 
     static initBlocks() {
         this.blocks = []
-        for (let i = 1; i <= 6; i++) {
+        for (let i = 1; i <= 8; i++) {
             this.blocks.push( new Block() )
         }
     }
 
     static updatePosition(deltaTime) {
 
-        for (let i = 0; i < this.blocks.length; i++) {
+        for (let i = 0; i < getRandomBlocks(); i++) {
 
             let x = this.blocks[i].x;
             let y = this.blocks[i].y;
@@ -142,6 +142,10 @@ class FallingBlocks {
 
 
 // =========================   UTIL FUNCTIONS   =========================
+
+function getRandomBlocks() {
+    return Math.ceil(Math.random() * 3) + 5;
+}
 
 function getRandomX() {
     let val = Math.random();
